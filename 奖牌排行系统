@@ -1,0 +1,216 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct geshu 
+{
+	char guojia[100];
+	int jinpai;
+	int yinpai;
+	int tongpai;
+	int all;
+
+
+};
+
+void printpaizi(struct  geshu paizi )
+{
+
+	printf("%s %d %d %d %d",paizi.guojia,paizi.jinpai,paizi.yinpai,paizi.all);
+
+}
+	
+
+void duopaizi(struct geshu*paizi,char min[])
+{
+	char guojia[100];
+	int guoindex=0;
+	int dex=0;
+	while(min[dex]!='\0') 
+	{
+		guojia[guoindex++]=min[dex++];
+	}
+	strcpy(paizi->guojia,guojia);
+
+
+	dex++;
+	char jinpai[100]={'\0'};
+	int jindex=0;
+	while(min[dex]!='\t')
+	{
+		jinpai[jindex++]=min[dex++];
+	}
+	paizi->jinpai=atoi(jinpai);
+
+
+	dex++;
+	char yinpai[100]={'\0'};
+	int yindex=0;
+	while(min[dex]!='\t')
+	{
+		yinpai[yindex++]=min[dex++];
+	}
+	paizi->yinpai=atoi(yinpai);
+
+
+    dex++;
+	char tongpai[100]={'\0'};
+	int tongdex=0;
+	while(min[dex]!='\t')
+	{
+		tongpai[tongdex++]=min[dex++];
+	}
+	paizi->yinpai=atoi(tongpai);
+
+	dex++;
+	char all[100]={'\0'};
+	int alldex=0;
+	while(min[dex]!='\n')
+	{
+		all[alldex++]=min[dex++];
+	}
+	paizi->yinpai=atoi(all);
+
+
+}; 	
+int main()
+{
+	FILE*fp=fopen("","r");
+	if(fp=NULL)
+	{
+		printf("error\n");
+	    return 0;
+	}
+	char phb[8][100];
+	int first=1,i=0;
+	while(fgets(phb[i],100,fp)!=NULL)
+	{
+		if(first==1)
+		{
+			first=0;
+		}
+		else
+		{
+			i++;
+		}
+	}
+	fclose(fp);
+
+	struct geshu paizi[8];
+	for(i=0;i<8;i++)
+	{
+		duopaizi(&paizi[i],phb[i]);
+		printpaizi(paizi[i]);
+
+	}
+
+	struct geshu max=paizi[0],shao=paizi[0];
+	for(i=1;i<8;i++)
+	{
+		if(paizi[i].all>max.all)
+		{
+			max=paizi[i];
+		}
+		if(paizi[i].all>shao.all)
+		{
+			shao=paizi[i];
+		}
+	}
+	
+	printpaizi(max);
+	printpaizi(shao);
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	return 0;}
+  
+  
+  
+  
+  
+#include <stdio.h>
+#include <stdlib.h>
+
+struct game
+{
+	char name[100];
+	int jin;
+	int yin;
+	int tong;
+	int all;
+};
+
+void yudong(struct game a[],int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		int over=i;
+		struct game b=a[over+1];
+		while(over>0)
+		{
+			if(a[over].all>a[over+1].all)
+			{
+				a[over+1]=a[over];
+				over--;
+			}
+			else
+				break;
+			a[over+1]=b;
+		}
+	}
+}
+
+
+void niua(struct game a[],int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		for(int j=0;j<n;j++)
+		{
+			if(a[i].all<a[i+1].all)
+			{
+				struct game b=a[j];
+				a[j]=a[j+1];
+				a[j+1]=b;
+			}
+		}
+	}
+}
+
+
+int main()
+{
+	FILE*fp=fopen("","r");
+	if(fp==NULL)
+	{
+		printf("error\n");
+	}
+	
+	struct game c[8];
+	for(int i=0;i<8;i++)
+	{
+		fscanf(fp,"%s\t%d\t%d\t%d\t%d\n",c[i].name,100,&c[i].jin,&c[i].yin,&c[i].tong,&c[i].all);
+	}
+
+	fclose(fp);
+	niua(c,8);
+	FILE*lifp=fopen("","w");
+	for(i=0;i<8;i++)
+	{
+		fprintf(lifp,"%s\t%d\t%d\t%d\t%d\n",c[i].name,100,&c[i].jin,&c[i].yin,&c[i].tong,&c[i].all);
+	}
+	
+	fclose(lifp);
+	
+	
+
+	
+	
+	return 0;}
